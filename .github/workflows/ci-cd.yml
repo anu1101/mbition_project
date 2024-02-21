@@ -26,8 +26,10 @@ jobs:
           docker push ananya1101/mbitionproject:latest   
 
     - name: Deploy to minikube
-      run:
+      run: |
         kubectl apply -f k8s-node-app.yaml
+        kubectl get pods -A
+
     - name: Test service URLs
       run: |
           minikube service list
