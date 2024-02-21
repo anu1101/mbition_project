@@ -51,6 +51,8 @@ jobs:
       run: minikube start
 
     - name: Apply Kubernetes manifests
-      run: kubectl apply -f kubernetes-manifests/
+      run: |
+        echo "Current working directory is: $(pwd)"
+        kubectl apply -f kubernetes-manifests/
 
      
