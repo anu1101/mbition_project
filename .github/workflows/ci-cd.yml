@@ -1,52 +1,34 @@
-name: CI/CD Pipeline
+name: Deploy to Minikube using GitHub Actions
 
-on:
-  push:
-    branches:
-      - main  
-
+on: [push]
+  
 jobs:
-  build:
+  job1:
     runs-on: ubuntu-latest
-
+    name: build Node.js Docker Image and deploy to minikube
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v2
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_PASSWORD}}
-
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-
-    - name: Install dependencies
+    - name: Start minikube
+      uses: medyagh/setup-minikube@master
+    - name: Try the cluster !
+      run: kubectl get pods -A
+    - name: Build image
       run: |
-        pip install -r requirements.txt
-    - name: Build Docker image
-      run: |
-        docker build -t my-app .
-        docker tag my-app ananya1101/mbitionproject:latest
-        docker push ananya1101/mbitionproject:latest
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'  
+          export SHELL=/bin/bash
+          eval $(minikube -p minikube docker-env)
+          docker build -t my-app .
+          docker tag my-app ananya1101/mbitionproject:latest
+          docker push ananya1101/mbitionproject:latest   
 
-    steps:
-    - name: Install Minikube
+    - name: Deploy to minikube
+      run:
+        kubectl apply -f k8s-node-app.yaml
+    - name: Test service URLs
       run: |
-        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        sudo install minikube-linux-amd64 /usr/local/bin/minikube
-    - name: Start Minikube
-      run: minikube start
-
-    - name: Apply Kubernetes manifests
-      run: |
-        echo "Current working directory is: $(pwd)"
-        kubectl apply -f /home/runner/work/mbition_project/mbition_project/app.yaml
+          minikube service list
+          minikube service nodejs-app --url
