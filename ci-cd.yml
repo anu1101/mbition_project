@@ -55,6 +55,6 @@ jobs:
       run: minikube start
 
     - name: Apply Kubernetes manifests
-      run: kubectl apply -f kubernetes-manifests/
+      run: kubectl apply -f app.yaml
 
      
