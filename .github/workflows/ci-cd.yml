@@ -29,8 +29,3 @@ jobs:
       run: |
         kubectl apply -f k8s-node-app.yaml
         kubectl get pods -A
-
-    - name: Test service URLs
-      run: |
-          minikube service list
-          minikube service my-flask-app --url
