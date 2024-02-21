@@ -5,7 +5,7 @@ on: [push]
 jobs:
   job1:
     runs-on: ubuntu-latest
-    name: build Node.js Docker Image and deploy to minikube
+    name: build my-flask-app Docker Image and deploy to minikube
     steps:
     - uses: actions/checkout@v2
     - name: Login to Docker Hub
