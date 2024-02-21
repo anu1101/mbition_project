@@ -49,4 +49,4 @@ jobs:
     - name: Apply Kubernetes manifests
       run: |
         echo "Current working directory is: $(pwd)"
-        kubectl apply -f app.yaml
+        kubectl apply -f /home/runner/work/mbition_project/mbition_project/app.yaml
