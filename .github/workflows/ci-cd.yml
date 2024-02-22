@@ -12,6 +12,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install -r requirements.txt
+        pip3 install pytest pytest-cov
+
     - name: Install kubectl
       uses: azure/setup-kubectl@v2.0
       with:
@@ -37,6 +48,9 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+    - name: Run tests
+      run: pytest --cov=test_web_app --cov-report=term-missing --cov-branch
 
     - name: Update kube config
       run: aws eks update-kubeconfig --name primuslearning
