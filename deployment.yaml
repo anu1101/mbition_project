@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: my-flask-app
-        image: public.ecr.aws/x6f2f4a8/mbitionproject:1.1
+        image: 654654455918.dkr.ecr.eu-central-1.amazonaws.com/mbitionproject:1.1
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
