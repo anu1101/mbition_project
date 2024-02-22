@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-flask-app
-  namespace: default
 spec:
   selector:
     app: my-flask-app
@@ -10,5 +9,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80  # Port exposed by the service
-      targetPort: 8000  # Port on which your Flask application is running
+      targetPort: 3000  # Port on which your Flask application is running
   type: LoadBalancer
